@@ -1,24 +1,37 @@
+
 {% if session.get("username") %}
-{% set role = session.get("role") %}
-<nav class="topnav">
-    <a class="brand" href="/">SmartShop</a>
-    {% if role in ["owner", "cashier"] %}
-        <a href="/sales/new">Sell</a>
-        <a href="/sales">Sales</a>
-        <a href="/cash">Cash</a>
-    {% endif %}
-    {% if role in ["owner", "stock_controller"] %}
-        <a href="/products">Products</a>
-        <a href="/stock-history">Stock</a>
-    {% endif %}
-    {% if role == "owner" %}
-        <a href="/expenses">Expenses</a>
-        <a href="/reports">Reports</a>
-        <a href="/audit-log">Audit</a>
-        <a href="/users">Users</a>
-    {% endif %}
-    <span class="spacer"></span>
-    <span class="who">{{ session["username"] }} ({{ role }})</span>
-    <form method="POST" action="/logout"><button type="submit">Log out</button></form>
-</nav>
+    {% set role = session.get("role") %}
+
+    <nav class="topnav" aria-label="Main navigation">
+        <a class="brand" href="/">SmartShop</a>
+
+        {% if role in ["owner", "cashier"] %}
+            <a href="/sales/new">Sell</a>
+            <a href="/sales">Sales</a>
+            <a href="/cash">Cash</a>
+        {% endif %}
+
+        {% if role in ["owner", "stock_controller"] %}
+            <a href="/products">Products</a>
+            <a href="/stock-history">Stock</a>
+        {% endif %}
+
+        {% if role == "owner" %}
+            <a href="/expenses">Expenses</a>
+            <a href="/reports">Reports</a>
+            <a href="/audit-log">Audit</a>
+            <a href="/users">Users</a>
+        {% endif %}
+
+        <span class="spacer"></span>
+
+        <span class="who">
+            Signed in: {{ session["username"] }}
+            · {{ role|replace("_", " ")|title }}
+        </span>
+
+        <form method="POST" action="/logout">
+            <button type="submit">Log out</button>
+        </form>
+    </nav>
 {% endif %}

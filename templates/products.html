@@ -1,59 +1,133 @@
- <!DOCTYPE html>
-<html>
+
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>Products - SmartShop</title>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Products - SmartShop</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     {% include "nav.html" %}
-    <h1>Products</h1>
-    <p><a href="/">Back to home</a></p>
-    <p><a href="/stock-history">View stock history</a></p>
 
-    <h2>Add a product</h2>
-    <form method="POST" action="/products">
-        <p>Name: <input type="text" name="name" required></p>
-        <p>Selling price (R): <input type="number" step="0.01" min="0" name="selling_price" required></p>
-        <p>Cost price (R): <input type="number" step="0.01" min="0" name="cost_price" required></p>
-        <p>Stock quantity: <input type="number" min="0" name="stock_quantity" required></p>
-        <p>Reorder level: <input type="number" min="0" name="reorder_level" required></p>
-        <button type="submit">Save product</button>
-    </form>
+    <main class="container">
+        <header class="page-header">
+            <div>
+                <p class="eyebrow">INVENTORY MANAGEMENT</p>
+                <h1>Products</h1>
+                <p>Manage your products, prices and stock levels.</p>
+            </div>
+            <a class="button button-secondary" href="/">Back to home</a>
+        </header>
 
-    <h2>All products</h2>
-    <table border="1" cellpadding="6">
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Selling price</th>
-            <th>Cost price</th>
-            <th>Stock</th>
-            <th>Reorder level</th>
-            <th>Action</th>
-        </tr>
-        {% for p in products %}
-        <tr>
-            <td>{{ p["id"] }}</td>
-            <td>{{ p["name"] }}</td>
-            <td>R{{ "%.2f"|format(p["selling_price"]) }}</td>
-            <td>R{{ "%.2f"|format(p["cost_price"]) }}</td>
-            <td>
-                {{ p["stock_quantity"] }}
-                {% if p["stock_quantity"] <= p["reorder_level"] %}
-                    <strong style="color: red;">LOW</strong>
-                {% endif %}
-            </td>
-            <td>{{ p["reorder_level"] }}</td>
-            <td>
-                <a href="/products/{{ p['id'] }}/edit">Edit</a>
-                <a href="/products/{{ p['id'] }}/stock-in">Add stock</a>
-                <form method="POST" action="/products/{{ p['id'] }}/deactivate">
-                    <button type="submit">Deactivate</button>
-                </form>
-            </td>
-        </tr>
-        {% endfor %}
-    </table>
+        <section class="card">
+            <div class="section-heading">
+                <div>
+                    <h2>Add a product</h2>
+                    <p>Enter the product details below.</p>
+                </div>
+            </div>
+
+            <form method="POST" action="/products" class="form-grid">
+                <div class="form-group">
+                    <label for="name">Product name</label>
+                    <input id="name" type="text" name="name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="selling_price">Selling price (R)</label>
+                    <input id="selling_price" type="number"
+                           step="0.01" min="0"
+                           name="selling_price" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="cost_price">Cost price (R)</label>
+                    <input id="cost_price" type="number"
+                           step="0.01" min="0"
+                           name="cost_price" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="stock_quantity">Opening stock quantity</label>
+                    <input id="stock_quantity" type="number"
+                           min="0" name="stock_quantity" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="reorder_level">Reorder level</label>
+                    <input id="reorder_level" type="number"
+                           min="0" name="reorder_level" required>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit">Save product</button>
+                </div>
+            </form>
+        </section>
+
+        <section class="card">
+            <div class="section-heading">
+                <div>
+                    <h2>All products</h2>
+                    <p>Review prices, stock quantities and reorder levels.</p>
+                </div>
+                <a href="/stock-history">View stock history</a>
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Product</th>
+                            <th>Selling price</th>
+                            <th>Cost price</th>
+                            <th>Stock</th>
+                            <th>Reorder level</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for p in products %}
+                        <tr>
+                            <td>{{ p["id"] }}</td>
+                            <td><strong>{{ p["name"] }}</strong></td>
+                            <td>R{{ "%.2f"|format(p["selling_price"]) }}</td>
+                            <td>R{{ "%.2f"|format(p["cost_price"]) }}</td>
+                            <td>
+                                {{ p["stock_quantity"] }}
+                                {% if p["stock_quantity"] <= p["reorder_level"] %}
+                                    <span class="status-badge status-low">LOW STOCK</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ p["reorder_level"] }}</td>
+                            <td>
+                                <div class="action-links">
+                                    <a href="/products/{{ p['id'] }}/edit">Edit</a>
+                                    <a href="/products/{{ p['id'] }}/stock-in">Add stock</a>
+
+                                    <form method="POST"
+                                          action="/products/{{ p['id'] }}/deactivate"
+                                          onsubmit="return confirm('Deactivate this product?');">
+                                        <button type="submit" class="button-danger">
+                                            Deactivate
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="7" class="empty-state">
+                                No products have been added yet.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
 </body>
 </html>

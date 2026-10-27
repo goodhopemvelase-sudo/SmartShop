@@ -1,22 +1,52 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Login - SmartShop</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     {% include "nav.html" %}
-    <h1>SmartShop login</h1>
 
-    {% if error %}
-        <p style="color: red;">{{ error }}</p>
-    {% endif %}
+    <main class="form-card" style="max-width: 540px; margin: 42px auto;">
+        <span class="hero-tag"
+              style="background:#e4f3ec;color:#14513e;border-color:#c7e8d8;">
+            STAFF ACCESS
+        </span>
 
-    <form method="POST">
-        <p>Username: <input type="text" name="username" required></p>
-        <p>Password: <input type="password" name="password" required></p>
-        <button type="submit">Log in</button>
-    </form>
+        <h1 style="margin-top: 8px;">Welcome to SmartShop</h1>
+
+        <p>Log in using the username and password assigned to your account.</p>
+
+        {% if error %}
+            <p class="error" role="alert">{{ error }}</p>
+        {% endif %}
+
+        <form method="POST">
+            <label for="username">Username</label>
+            <input
+                id="username"
+                type="text"
+                name="username"
+                autocomplete="username"
+                required
+            >
+
+            <label for="password">Password</label>
+            <input
+                id="password"
+                type="password"
+                name="password"
+                autocomplete="current-password"
+                required
+            >
+
+            <button type="submit">Log in securely</button>
+        </form>
+
+        <p><a href="/">← Back to homepage</a></p>
+    </main>
 </body>
 </html>

@@ -1,13 +1,143 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>SmartShop</title>
+    <meta charset="UTF-8">
+    <title>SmartShop | Shop Management</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     {% include "nav.html" %}
-    <h1>SmartShop</h1>
-    <p>Welcome to your shop management system. Use the menu above.</p>
+
+    {% if session.get("username") %}
+        <section class="hero">
+            <span class="hero-tag">SHOP MANAGEMENT, MADE SIMPLER</span>
+            <h1>Welcome back, {{ session["username"] }}.</h1>
+            <p>Keep your shop moving with a clear view of sales, stock, cash and daily operations.</p>
+        </section>
+
+        <div class="dashboard-heading">
+            <div>
+                <h2>Your workspace</h2>
+                <p>Choose a task to get started. Available options depend on your role.</p>
+            </div>
+        </div>
+
+        <div class="feature-grid">
+            {% set role = session.get("role") %}
+
+            {% if role in ["owner", "cashier"] %}
+                <a class="feature-card" href="/sales/new">
+                    <span class="feature-icon">＋</span>
+                    <h3>Make a sale</h3>
+                    <p>Record a customer purchase and select its payment method.</p>
+                </a>
+
+                <a class="feature-card" href="/sales">
+                    <span class="feature-icon">▤</span>
+                    <h3>Sales history</h3>
+                    <p>Review recorded sales and their current status.</p>
+                </a>
+
+                <a class="feature-card" href="/cash">
+                    <span class="feature-icon">R</span>
+                    <h3>Daily cash</h3>
+                    <p>View the till and manage the cash session.</p>
+                </a>
+            {% endif %}
+
+            {% if role in ["owner", "stock_controller"] %}
+                <a class="feature-card" href="/products">
+                    <span class="feature-icon">□</span>
+                    <h3>Products</h3>
+                    <p>Manage product details, prices and stock levels.</p>
+                </a>
+
+                <a class="feature-card" href="/stock-history">
+                    <span class="feature-icon">↗</span>
+                    <h3>Stock history</h3>
+                    <p>Review recorded stock movements.</p>
+                </a>
+            {% endif %}
+
+            {% if role == "owner" %}
+                <a class="feature-card" href="/expenses">
+                    <span class="feature-icon">−</span>
+                    <h3>Expenses</h3>
+                    <p>Record and review shop expenses.</p>
+                </a>
+
+                <a class="feature-card" href="/reports">
+                    <span class="feature-icon">▥</span>
+                    <h3>Reports</h3>
+                    <p>Review sales and financial summaries.</p>
+                </a>
+
+                <a class="feature-card" href="/audit-log">
+                    <span class="feature-icon">✓</span>
+                    <h3>Audit log</h3>
+                    <p>Review recorded actions in the system.</p>
+                </a>
+
+                <a class="feature-card" href="/users">
+                    <span class="feature-icon">♙</span>
+                    <h3>User management</h3>
+                    <p>Create and manage staff accounts.</p>
+                </a>
+            {% endif %}
+        </div>
+
+        <p class="notice">
+            Security reminder: only use the account assigned to you,
+            and log out when you finish.
+        </p>
+
+    {% else %}
+        <section class="hero">
+            <span class="hero-tag">SMARTER EVERYDAY SHOP OPERATIONS</span>
+            <h1>Your shop. Your stock. All in one place.</h1>
+            <p>
+                SmartShop helps authorised staff manage products, record sales,
+                track stock and review shop activity from one workspace.
+            </p>
+            <a class="primary-link" href="/login">Log in to SmartShop →</a>
+        </section>
+
+        <div class="dashboard-heading">
+            <div>
+                <h2>Tools for daily shop operations</h2>
+                <p>Simple, organised workflows for your team.</p>
+            </div>
+        </div>
+
+        <div class="feature-grid">
+            <div class="feature-card">
+                <span class="feature-icon">▤</span>
+                <h3>Sales recording</h3>
+                <p>Record transactions and review sales history.</p>
+            </div>
+
+            <div class="feature-card">
+                <span class="feature-icon">□</span>
+                <h3>Stock control</h3>
+                <p>Keep product information and stock movements organised.</p>
+            </div>
+
+            <div class="feature-card">
+                <span class="feature-icon">R</span>
+                <h3>Cash tracking</h3>
+                <p>Support daily till checks and cash-session records.</p>
+            </div>
+
+            <div class="feature-card">
+                <span class="feature-icon">▥</span>
+                <h3>Useful reports</h3>
+                <p>Help authorised users review shop activity.</p>
+            </div>
+        </div>
+    {% endif %}
+
+    <footer>SmartShop · Shop management workspace</footer>
 </body>
 </html>

@@ -10,8 +10,8 @@ app = Flask(__name__)
 app.secret_key = os.environ.get("SMARTSHOP_SECRET")
 
 if not app.secret_key:
- raise RuntimeError("Set the SMARTSHOP_SECRET environment variable.")
- 
+    raise RuntimeError("Set the SMARTSHOP_SECRET environment variable.")
+
 create_tables()
 
 EXPENSE_CATEGORIES = [
