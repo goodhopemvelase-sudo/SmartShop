@@ -16,3 +16,15 @@ python -m pytest -v
 
 ## Backup
 python backup.py
+
+## Testing
+
+SmartShop includes automated tests using `pytest`.
+
+To run the tests locally:
+
+```bash
+python -m pytest -v
+```
+
+**Latest result:** 9 tests passed.
