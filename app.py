@@ -7,7 +7,11 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from database import get_connection, create_tables
 
 app = Flask(__name__)
-app.secret_key = os.environ.get("SMARTSHOP_SECRET", "dev-only-change-me")
+app.secret_key = os.environ.get("SMARTSHOP_SECRET")
+
+if not app.secret_key:
+ raise RuntimeError("Set the SMARTSHOP_SECRET environment variable.")
+ 
 create_tables()
 
 EXPENSE_CATEGORIES = [
