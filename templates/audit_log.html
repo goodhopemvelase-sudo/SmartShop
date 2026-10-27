@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Audit log - SmartShop</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    {% include "nav.html" %}
+    <h1>Audit log</h1>
+    <p><a href="/">Back to home</a></p>
+    <p>Showing the latest 200 actions. Times are in UTC (2 hours behind South Africa).</p>
+
+    <table border="1" cellpadding="6">
+        <tr>
+            <th>When</th>
+            <th>User</th>
+            <th>Action</th>
+            <th>Record</th>
+            <th>Details</th>
+        </tr>
+        {% for l in logs %}
+        <tr>
+            <td>{{ l["created_at"] }}</td>
+            <td>{{ l["username"] }}</td>
+            <td>{{ l["action"] }}</td>
+            <td>{{ l["table_name"] }} #{{ l["record_id"] }}</td>
+            <td>{{ l["details"] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

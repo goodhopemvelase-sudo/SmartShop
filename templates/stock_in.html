@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add stock - SmartShop</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    {% include "nav.html" %}
+    <h1>Add stock: {{ product['name'] }}</h1>
+    <p><a href="/products">Back to products</a></p>
+    <p>Current stock: {{ product['stock_quantity'] }}</p>
+
+    <form method="POST">
+        <p>Quantity received: <input type="number" min="1" name="quantity" required></p>
+        <p>Reason: <input type="text" name="reason" value="Stock received from supplier" required></p>
+        <button type="submit">Save stock</button>
+    </form>
+</body>
+</html>

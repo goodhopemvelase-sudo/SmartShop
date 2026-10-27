@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>New sale - SmartShop</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    {% include "nav.html" %}
+    <h1>New sale</h1>
+    <p><a href="/">Back to home</a></p>
+
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+
+    <form method="POST">
+        <table border="1" cellpadding="6">
+            <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>In stock</th>
+                <th>Quantity to sell</th>
+            </tr>
+            {% for p in products %}
+            <tr>
+                <td>{{ p["name"] }}</td>
+                <td>R{{ "%.2f"|format(p["selling_price"]) }}</td>
+                <td>{{ p["stock_quantity"] }}</td>
+                <td><input type="number" min="0" value="0" name="qty_{{ p['id'] }}"></td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <p>Payment method:
+            <select name="payment_method">
+                <option value="cash">Cash</option>
+                <option value="card">Card</option>
+                <option value="bank_transfer">Bank transfer</option>
+            </select>
+        </p>
+        <button type="submit">Complete sale</button>
+    </form>
+</body>
+</html>

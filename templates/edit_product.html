@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit product - SmartShop</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    {% include "nav.html" %}
+    <h1>Edit product</h1>
+    <p><a href="/products">Back to products</a></p>
+
+    <form method="POST">
+        <p>Name: <input type="text" name="name" value="{{ product['name'] }}" required></p>
+        <p>Selling price (R): <input type="number" step="0.01" min="0" name="selling_price" value="{{ product['selling_price'] }}" required></p>
+        <p>Cost price (R): <input type="number" step="0.01" min="0" name="cost_price" value="{{ product['cost_price'] }}" required></p>
+        <p>Reorder level: <input type="number" min="0" name="reorder_level" value="{{ product['reorder_level'] }}" required></p>
+        <button type="submit">Save changes</button>
+    </form>
+</body>
+</html>

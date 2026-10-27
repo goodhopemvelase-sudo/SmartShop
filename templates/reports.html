@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reports - SmartShop</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    {% include "nav.html" %}
+    <h1>Reports</h1>
+    <p><a href="/">Back to home</a></p>
+
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+
+    <form method="GET">
+        <p>From: <input type="date" name="start" value="{{ start }}">
+           To: <input type="date" name="end" value="{{ end }}">
+           <button type="submit">Show report</button>
+        </p>
+    </form>
+    <p>
+        <a href="/reports?start={{ today }}&end={{ today }}">Today</a> |
+        <a href="/reports?start={{ month_start }}&end={{ today }}">This month</a>
+    </p>
+
+    <h2>Sales and estimated gross profit</h2>
+    <table border="1" cellpadding="6">
+        <tr>
+            <td>Number of completed sales</td>
+            <td>{{ sales_count }}</td>
+        </tr>
+        <tr>
+            <td>Sales revenue</td>
+            <td>R{{ "%.2f"|format(revenue) }}</td>
+        </tr>
+        <tr>
+            <td>- Cost of goods sold</td>
+            <td>R{{ "%.2f"|format(cogs) }}</td>
+        </tr>
+        <tr>
+            <th>Estimated gross profit</th>
+            <th>R{{ "%.2f"|format(gross_profit) }}</th>
+        </tr>
+    </table>
+    <p><em>Gross profit is not net profit. Expenses are not subtracted here.</em></p>
+
+    <h2>Sales by payment method</h2>
+    <table border="1" cellpadding="6">
+        <tr>
+            <th>Payment method</th>
+            <th>Sales</th>
+            <th>Total</th>
+        </tr>
+        {% for m in by_method %}
+        <tr>
+            <td>{{ m["payment_method"] }}</td>
+            <td>{{ m["count"] }}</td>
+            <td>R{{ "%.2f"|format(m["total"]) }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Best-selling products</h2>
+    <table border="1" cellpadding="6">
+        <tr>
+            <th>Product</th>
+            <th>Units sold</th>
+            <th>Revenue</th>
+        </tr>
+        {% for t in top_products %}
+        <tr>
+            <td>{{ t["name"] }}</td>
+            <td>{{ t["units"] }}</td>
+            <td>R{{ "%.2f"|format(t["revenue"]) }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Expenses by category</h2>
+    <table border="1" cellpadding="6">
+        <tr>
+            <th>Category</th>
+            <th>Total</th>
+        </tr>
+        {% for e in expenses_by_category %}
+        <tr>
+            <td>{{ e["category"] }}</td>
+            <td>R{{ "%.2f"|format(e["total"]) }}</td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <th>All expenses</th>
+            <th>R{{ "%.2f"|format(expenses_total) }}</th>
+        </tr>
+    </table>
+
+    <h2>Closed tills in this period</h2>
+    <table border="1" cellpadding="6">
+        <tr>
+            <th>Date</th>
+            <th>Opening cash</th>
+            <th>Expected</th>
+            <th>Counted</th>
+            <th>Difference</th>
+        </tr>
+        {% for s in closed_sessions %}
+        <tr>
+            <td>{{ s["session_date"] }}</td>
+            <td>R{{ "%.2f"|format(s["opening_cash"]) }}</td>
+            <td>R{{ "%.2f"|format(s["expected_closing"]) }}</td>
+            <td>R{{ "%.2f"|format(s["actual_closing"]) }}</td>
+            <td>R{{ "%.2f"|format(s["difference"]) }}</td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <th colspan="4">Total difference</th>
+            <th>R{{ "%.2f"|format(difference_total) }}</th>
+        </tr>
+    </table>
+
+    <h2>Low-stock products (right now)</h2>
+    <table border="1" cellpadding="6">
+        <tr>
+            <th>Product</th>
+            <th>In stock</th>
+            <th>Reorder level</th>
+        </tr>
+        {% for p in low_stock %}
+        <tr>
+            <td>{{ p["name"] }}</td>
+            <td>{{ p["stock_quantity"] }}</td>
+            <td>{{ p["reorder_level"] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

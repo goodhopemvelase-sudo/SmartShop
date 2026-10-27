@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Till closed - SmartShop</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    {% include "nav.html" %}
+    <h1>Till closed</h1>
+    <p><a href="/cash">Back to daily cash</a></p>
+
+    <table border="1" cellpadding="6">
+        <tr>
+            <td>Date</td>
+            <td>{{ cash_session["session_date"] }}</td>
+        </tr>
+        <tr>
+            <td>Opened at</td>
+            <td>{{ cash_session["opened_at"] }}</td>
+        </tr>
+        <tr>
+            <td>Closed at</td>
+            <td>{{ cash_session["closed_at"] }}</td>
+        </tr>
+        <tr>
+            <td>Opening cash</td>
+            <td>R{{ "%.2f"|format(cash_session["opening_cash"]) }}</td>
+        </tr>
+        <tr>
+            <td>Expected closing cash</td>
+            <td>R{{ "%.2f"|format(cash_session["expected_closing"]) }}</td>
+        </tr>
+        <tr>
+            <td>Cash counted</td>
+            <td>R{{ "%.2f"|format(cash_session["actual_closing"]) }}</td>
+        </tr>
+        <tr>
+            <th>Difference</th>
+            <th>R{{ "%.2f"|format(cash_session["difference"]) }}</th>
+        </tr>
+    </table>
+
+    {% if cash_session["difference"] < 0 %}
+        <h2 style="color: red;">Shortage of R{{ "%.2f"|format(-cash_session["difference"]) }}</h2>
+    {% elif cash_session["difference"] > 0 %}
+        <h2 style="color: darkorange;">Surplus of R{{ "%.2f"|format(cash_session["difference"]) }}</h2>
+    {% else %}
+        <h2 style="color: green;">The till balances.</h2>
+    {% endif %}
+</body>
+</html>

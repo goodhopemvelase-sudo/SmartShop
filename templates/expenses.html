@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Expenses - SmartShop</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    {% include "nav.html" %}
+    <h1>Expenses</h1>
+    <p><a href="/">Back to home</a></p>
+
+    <h2>Record an expense</h2>
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+    <form method="POST">
+        <p>Date: <input type="date" name="expense_date" value="{{ today }}" required></p>
+        <p>Category:
+            <select name="category">
+                {% for c in categories %}
+                    <option value="{{ c }}">{{ c }}</option>
+                {% endfor %}
+            </select>
+        </p>
+        <p>Description: <input type="text" name="description" required></p>
+        <p>Amount (R): <input type="number" step="0.01" min="0.01" name="amount" required></p>
+        <p>Paid with:
+            <select name="payment_method">
+                <option value="cash">Cash (from the till)</option>
+                <option value="card">Card</option>
+                <option value="bank_transfer">Bank transfer</option>
+            </select>
+        </p>
+        <button type="submit">Save expense</button>
+    </form>
+
+    <h2>Find expenses</h2>
+    <form method="GET">
+        <p>From: <input type="date" name="start" value="{{ start }}">
+           To: <input type="date" name="end" value="{{ end }}">
+           Category:
+           <select name="category_filter">
+               <option value="">All</option>
+               {% for c in categories %}
+                   <option value="{{ c }}" {% if c == category_filter %}selected{% endif %}>{{ c }}</option>
+               {% endfor %}
+           </select>
+           <button type="submit">Filter</button>
+           <a href="/expenses">Clear</a>
+        </p>
+    </form>
+
+    <h2>Total shown: R{{ "%.2f"|format(total) }}</h2>
+
+    <table border="1" cellpadding="6">
+        <tr>
+            <th>Date</th>
+            <th>Category</th>
+            <th>Description</th>
+            <th>Amount</th>
+            <th>Paid with</th>
+            <th>Recorded by</th>
+        </tr>
+        {% for e in expenses %}
+        <tr>
+            <td>{{ e["expense_date"] }}</td>
+            <td>{{ e["category"] }}</td>
+            <td>{{ e["description"] }}</td>
+            <td>R{{ "%.2f"|format(e["amount"]) }}</td>
+            <td>{{ e["payment_method"] }}</td>
+            <td>{{ e["username"] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

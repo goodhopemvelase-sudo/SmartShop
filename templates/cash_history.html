@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Till history - SmartShop</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    {% include "nav.html" %}
+    <h1>Till history</h1>
+    <p><a href="/cash">Back to daily cash</a></p>
+
+    <h2>Total difference across all closed tills: R{{ "%.2f"|format(total_difference) }}</h2>
+
+    <table border="1" cellpadding="6">
+        <tr>
+            <th>Date</th>
+            <th>Opening cash</th>
+            <th>Expected</th>
+            <th>Counted</th>
+            <th>Difference</th>
+            <th>Closed by</th>
+            <th>Details</th>
+        </tr>
+        {% for s in sessions %}
+        <tr>
+            <td>{{ s["session_date"] }}</td>
+            <td>R{{ "%.2f"|format(s["opening_cash"]) }}</td>
+            <td>R{{ "%.2f"|format(s["expected_closing"]) }}</td>
+            <td>R{{ "%.2f"|format(s["actual_closing"]) }}</td>
+            <td>
+                {% if s["difference"] < 0 %}
+                    <strong style="color: red;">R{{ "%.2f"|format(s["difference"]) }}</strong>
+                {% elif s["difference"] > 0 %}
+                    <strong style="color: darkorange;">R{{ "%.2f"|format(s["difference"]) }}</strong>
+                {% else %}
+                    <strong style="color: green;">R0.00</strong>
+                {% endif %}
+            </td>
+            <td>{{ s["username"] }}</td>
+            <td><a href="/cash/session/{{ s['id'] }}">View</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

@@ -1,0 +1,46 @@
+ <!DOCTYPE html>
+<html>
+<head>
+    <title>Sales - SmartShop</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    {% include "nav.html" %}
+    <h1>Sales</h1>
+    <p><a href="/">Back to home</a></p>
+    <p><a href="/sales/new">Make a sale</a></p>
+
+    <h2>Total of completed sales: R{{ "%.2f"|format(total_sales) }}</h2>
+
+    <table border="1" cellpadding="6">
+        <tr>
+            <th>Sale #</th>
+            <th>Date</th>
+            <th>Payment method</th>
+            <th>Status</th>
+            <th>Total</th>
+            <th>Recorded by</th>
+            <th>Action</th>
+        </tr>
+        {% for s in sales %}
+        <tr>
+            <td>{{ s["id"] }}</td>
+            <td>{{ s["created_at"] }}</td>
+            <td>{{ s["payment_method"] }}</td>
+            <td>{{ s["status"] }}</td>
+            <td>R{{ "%.2f"|format(s["total_amount"]) }}</td>
+            <td>{{ s["username"] }}</td>
+            <td>
+                {% if s["status"] == "completed" %}
+                <form method="POST" action="/sales/{{ s['id'] }}/cancel"
+                      onsubmit="return confirm('Cancel this sale and return the stock?');">
+                    <button type="submit">Cancel sale</button>
+                </form>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

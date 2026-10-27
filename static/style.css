@@ -1,0 +1,85 @@
+:root {
+    --green: #1f7a4d;
+    --green-dark: #165c3a;
+    --bg: #f4f6f5;
+    --text: #1d2623;
+    --border: #d5dcd9;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    padding: 0 16px 40px;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+}
+
+h1 { margin: 24px 0 8px; font-size: 1.8rem; }
+h2 { margin: 28px 0 8px; font-size: 1.2rem; color: var(--green-dark); }
+
+a { color: var(--green); }
+
+.topnav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 16px;
+    background: var(--green);
+    margin: 0 -16px 16px;
+    padding: 10px 16px;
+}
+.topnav a { color: #fff; text-decoration: none; font-weight: 500; }
+.topnav a:hover { text-decoration: underline; }
+.topnav .brand { font-size: 1.2rem; font-weight: 700; margin-right: 8px; }
+.topnav .spacer { flex: 1; }
+.topnav .who { color: #d6efe1; font-size: 0.9rem; }
+.topnav form { margin: 0; }
+
+table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    border-collapse: collapse;
+    background: #fff;
+    margin: 8px 0 16px;
+}
+th, td { border: 1px solid var(--border); padding: 8px 12px; text-align: left; }
+th { background: #e8f1ec; }
+tr:nth-child(even) td { background: #fafcfb; }
+
+input, select {
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 1rem;
+    max-width: 100%;
+}
+input:focus, select:focus { outline: 2px solid var(--green); }
+
+button {
+    padding: 8px 16px;
+    border: 0;
+    border-radius: 6px;
+    background: var(--green);
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+}
+button:hover { background: var(--green-dark); }
+
+form[action*="deactivate"] button,
+form[action*="cancel"] button { background: #b3392f; }
+form[action*="deactivate"] button:hover,
+form[action*="cancel"] button:hover { background: #8e2b23; }
+
+@media (max-width: 600px) {
+    h1 { font-size: 1.5rem; }
+    input, select, button { width: 100%; margin-top: 4px; }
+    .topnav button { width: auto; }
+}

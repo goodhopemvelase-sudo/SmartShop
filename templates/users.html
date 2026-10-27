@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Users - SmartShop</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    {% include "nav.html" %}
+    <h1>Users</h1>
+    <p><a href="/">Back to home</a></p>
+
+    <h2>Add a user</h2>
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+    <form method="POST">
+        <p>Username: <input type="text" name="username" required></p>
+        <p>Password (at least 8 characters): <input type="password" name="password" required></p>
+        <p>Role:
+            <select name="role">
+                {% for r in roles %}
+                    <option value="{{ r }}">{{ r }}</option>
+                {% endfor %}
+            </select>
+        </p>
+        <button type="submit">Create user</button>
+    </form>
+
+    <h2>All users</h2>
+    <table border="1" cellpadding="6">
+        <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+        {% for u in users %}
+        <tr>
+            <td>{{ u["id"] }}</td>
+            <td>{{ u["username"] }}</td>
+            <td>{{ u["role"] }}</td>
+            <td>{% if u["is_active"] %}active{% else %}deactivated{% endif %}</td>
+            <td>
+                {% if u["is_active"] and u["id"] != session["user_id"] %}
+                <form method="POST" action="/users/{{ u['id'] }}/deactivate"
+                      onsubmit="return confirm('Deactivate this user?');">
+                    <button type="submit">Deactivate</button>
+                </form>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

@@ -1,0 +1,59 @@
+ <!DOCTYPE html>
+<html>
+<head>
+    <title>Products - SmartShop</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    {% include "nav.html" %}
+    <h1>Products</h1>
+    <p><a href="/">Back to home</a></p>
+    <p><a href="/stock-history">View stock history</a></p>
+
+    <h2>Add a product</h2>
+    <form method="POST" action="/products">
+        <p>Name: <input type="text" name="name" required></p>
+        <p>Selling price (R): <input type="number" step="0.01" min="0" name="selling_price" required></p>
+        <p>Cost price (R): <input type="number" step="0.01" min="0" name="cost_price" required></p>
+        <p>Stock quantity: <input type="number" min="0" name="stock_quantity" required></p>
+        <p>Reorder level: <input type="number" min="0" name="reorder_level" required></p>
+        <button type="submit">Save product</button>
+    </form>
+
+    <h2>All products</h2>
+    <table border="1" cellpadding="6">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Selling price</th>
+            <th>Cost price</th>
+            <th>Stock</th>
+            <th>Reorder level</th>
+            <th>Action</th>
+        </tr>
+        {% for p in products %}
+        <tr>
+            <td>{{ p["id"] }}</td>
+            <td>{{ p["name"] }}</td>
+            <td>R{{ "%.2f"|format(p["selling_price"]) }}</td>
+            <td>R{{ "%.2f"|format(p["cost_price"]) }}</td>
+            <td>
+                {{ p["stock_quantity"] }}
+                {% if p["stock_quantity"] <= p["reorder_level"] %}
+                    <strong style="color: red;">LOW</strong>
+                {% endif %}
+            </td>
+            <td>{{ p["reorder_level"] }}</td>
+            <td>
+                <a href="/products/{{ p['id'] }}/edit">Edit</a>
+                <a href="/products/{{ p['id'] }}/stock-in">Add stock</a>
+                <form method="POST" action="/products/{{ p['id'] }}/deactivate">
+                    <button type="submit">Deactivate</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
